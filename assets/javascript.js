@@ -16,7 +16,7 @@ for (let i = 0; i < times.length; i++) {
     const commentColumn = $("<div> </div>").attr("value", value[i])
     const textArea = $("<textarea> </textarea>")
     commentColumn.append(textArea)
-    //setting 'past', 'present' and 'future' class attributes to commentColumn//
+    //setting 'past', 'present' and 'future' class attributes to commentColumn using current hour from moment.js//
     if (value[i] == moment().format('H')) {
         commentColumn.attr("class", "present")
     }
@@ -25,8 +25,8 @@ for (let i = 0; i < times.length; i++) {
     }
     else { commentColumn.attr("class", "past") }
 
-    //If there are any items in Local Storage, append to commentColumnm//
-    const tasks = JSON.parse(localStorage.getItem(times[i]))
+    //If there are any items in Local Storage with today's date, append to commentColumn//
+    const tasks = JSON.parse(localStorage.getItem(moment().format('ll') + " - " + times[i]))
     if (tasks !== null) {
         commentColumn.text(tasks)
     }
@@ -36,11 +36,11 @@ for (let i = 0; i < times.length; i++) {
     timeRow.append(timeColumn, commentColumn, saveButton)
     timeContainer.append(timeRow)
 
-    //save text//
+    //after 'save' button is clicked, save text with today's date to local storage//
     saveButton.on("click", function () {
         const input = textArea.val()
         commentColumn.text(input)
-        localStorage.setItem(times[i], JSON.stringify(input))
+        localStorage.setItem((moment().format('ll') + " - " + times[i]), JSON.stringify(input))
     })
 
 }
